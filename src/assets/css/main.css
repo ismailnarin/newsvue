@@ -1,0 +1,28 @@
+.star-logo {
+  background-image: url("@/assets/image/sprite.png");
+  background-position: 0 0;
+  width: 193px;
+  height: 69px;
+}
+.custom-font-size-10 {
+  font-size: 1rem;
+}
+.custom-font-size-15 {
+  font-size: 1.5rem;
+}
+.custom-font-size-13 {
+  font-size: 1.3rem;
+}
+.custom-font-size-16 {
+  font-size: 1.6rem;
+}
+.height-header {
+  height: 4.2rem;
+}
+html {
+  font-size: 10px;
+  font-family: "Poppins", sans-serif;
+}
+.d-grid {
+  display: inline-grid;
+}
