@@ -1,76 +1,117 @@
 <template>
-  <swiper
-    :slidesPerView="'auto'"
-    :spaceBetween="30"
-    :navigation="true"
-    :autoplay="{
-      delay: 1500,
-      disableOnInteraction: false,
-    }"
-    :modules="modules"
-    class="mySwiper"
+  <carousel
+    :items-to-show="3"
+    :wrap-around="true"
+    v-model="currentSlide"
+    :autoplay="3000"
   >
-    <swiper-slide v-for="news in latestNews" :key="news.id">
-      <div class="custom-font-size-10 bg-yellow me-1">{{ news.hour }}</div>
-      <div class="custom-font-size-13">{{ news.news }}</div>
-    </swiper-slide>
-  </swiper>
+    <slide v-for="slide in latestNews" :key="slide.id">
+      <div class="carousel__item d-flex flex-row t-nowrap custom-font-size-13">
+        <div class="custom-font-size-10 bg-yellow me-1">{{ slide.hour }}</div>
+        <div>{{ slide.news }}</div>
+      </div>
+    </slide>
+  </carousel>
+  <div
+    class="navigation"
+    @mouseenter="showNavigation = true"
+    @mouseleave="showNavigation = false"
+  >
+    <i
+      class="bi bi-arrow-left-circle-fill"
+      @click="prev"
+      v-if="showNavigation"
+    ></i>
+    <i
+      class="bi bi-arrow-right-circle-fill"
+      @click="next"
+      v-if="showNavigation"
+    ></i>
+  </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/pagination";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-
-export default {
+import { defineComponent } from "vue";
+import { Carousel, Slide } from "vue3-carousel";
+import "vue3-carousel/dist/carousel.css";
+export default defineComponent({
+  name: "ExamplePagination",
   components: {
-    Swiper,
-    SwiperSlide,
+    Carousel,
+    Slide,
   },
+  data: () => ({
+    showNavigation: false,
+    currentSlide: 0,
+    settings: {
+      itemsToShow: 2,
+      snapAlign: "left",
+    },
+    breakpoints: {
+      700: {
+        itemsToShow: 2,
+        snapAlign: "center",
+      },
+      1024: {
+        itemsToShow: 2,
+        snapAlign: "start",
+      },
+    },
+  }),
   computed: {
     ...mapGetters({
       latestNews: "latestNews/_latestNews",
     }),
   },
-  setup() {
-    return {
-      modules: [Autoplay, Pagination, Navigation],
-    };
+  methods: {
+    prev() {
+      this.currentSlide--;
+    },
+    next() {
+      this.currentSlide++;
+    },
   },
-};
+});
 </script>
 <style scoped>
+.navigation {
+  display: flex;
+  position: absolute;
+  color: black;
+  font-size: 2.7rem;
+  cursor: pointer;
+  opacity: 0.7;
+  width: 100%;
+  justify-content: space-between;
+  height: 100%;
+  margin-top: -0.7rem;
+}
 .bg-yellow {
   background-color: yellow;
   color: black;
   font-weight: 600;
   padding: 3px;
 }
-</style>
-<style>
-.swiper {
-  width: 100%;
-  height: 100%;
+body {
+  padding: 20px;
 }
 
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
+.carousel__item {
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-wrap: nowrap;
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.carousel__slide {
+  flex: 0 0 auto;
 }
 
-.swiper-slide {
-  width: auto;
-  cursor: pointer;
+.carousel__prev,
+.carousel__next {
+  box-sizing: content-box;
+  border: 5px solid white;
 }
 </style>
